@@ -1,0 +1,77 @@
+<div class="layui-form" lay-filter="atlas-form" id="atlas-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">展示面标题</label>
+        <div class="layui-input-inline">
+            <select name="atlas_panels_id" id="atlas_panels_id">
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图集标题</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="atlas_title" value="{{ d.params.atlas_title || '' }}" lay-verify="required"
+                       placeholder="请输入标题" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图集图片</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="atlas_pic" value="{{ d.params.atlas_pic || '' }}" lay-verify=""
+                       placeholder="请上传图片" autocomplete="off" class="layui-input" id="img_url" disabled="true ">
+            </script>
+        </div>
+        <button style="float: left;" type="button" class="layui-btn" id="atlas-upload-atlas">上传图片</button>
+    </div>
+    <script type="text/html" template>
+        <input type="hidden" name="atlas_id" value="{{ d.params.atlas_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="atlas-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var panelsid;
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#atlas-upload-atlas',
+            url : '/words/s/atlas/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/panels/query", {},
+            function (data) {
+                var ssss=data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss,function (index, item) {
+                        if(item.panels_id==panelsid){
+                            $html += "<option value='" + item.panels_id + "' selected='selected'>" + item.panels_title + "</option>";
+                        }else {
+                            $html += "<option value='" + item.panels_id + "'>" + item.panels_title + "</option>";
+                        }
+                    });
+                    $('#atlas_panels_id').append($html);
+                    form.render("select");
+                }
+            });
+    })
+</script>

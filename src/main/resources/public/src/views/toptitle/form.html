@@ -1,0 +1,66 @@
+<div class="layui-form" lay-filter="toptitle-form" id="toptitle-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">专题</label>
+        <div class="layui-input-inline">
+            <select name="toptitle_special_id" id="toptitle_special_id">
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">专题标题</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="toptitle_title" value="{{ d.params.toptitle_title || '' }}" lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <script type="text/html" template>
+        <input type="hidden" name="toptitle_id" value="{{ d.params.toptitle_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="toptitle-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var specialid;
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#toptitle-upload-toptitle',
+            url : '/words/s/toptitle/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/special/query", {},
+            function (data) {
+                var ssss=data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss,function (index, item) {
+                        if(item.special_id==specialid){
+                            $html += "<option value='" + item.special_id + "' selected='selected'>" + item.special_name + "</option>";
+                        }else {
+                            $html += "<option value='" + item.special_id + "'>" + item.special_name + "</option>";
+                        }
+                    });
+                    $('#toptitle_special_id').append($html);
+                    form.render("select");
+                }
+            });
+    })
+</script>

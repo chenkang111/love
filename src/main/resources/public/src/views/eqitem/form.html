@@ -1,0 +1,127 @@
+<div class="layui-form" lay-filter="eqitem-form" id="eqitem-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试试卷</label>
+        <div class="layui-input-inline">
+            <select name="eqitem_test_id" id="eqitem_test_id" lay-filter="eqitem_test_id">
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试内容</label>
+        <div class="layui-input-inline">
+            <select name="eqitem_content_id" id="eqitem_content_id">
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">选项</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqitem_select" value="{{ d.params.eqitem_select || '' }}" lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选项分数</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqitem_point" value="{{ d.params.eqitem_point || '' }}" lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选项内容</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <textarea name="eqitem_content" style="width: 400px;" rows="10" cols="30"  lay-verify="required"
+                          placeholder="请输入内容" autocomplete="off" class="layui-textarea">
+                        {{ d.params.eqitem_content || '' }}
+                </textarea>
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">解读问题</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <textarea name="mark" style="width: 400px;" rows="10" cols="30"
+                          placeholder="请输入内容" autocomplete="off" class="layui-textarea">
+                        {{ d.params.mark || '' }}
+                </textarea>
+            </script>
+        </div>
+    </div>
+
+    <script type="text/html" template>
+        <input type="hidden" name="eqitem_id" value="{{ d.params.eqitem_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="eqitem-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var eqcontentid;
+    var eqtestid;
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#eqitem-upload-eqitem',
+            url : '/words/s/eqitem/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/eqtest/query", {},
+            function (data) {
+                var ssss=data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss,function (index, item) {
+                        if(item.eqtest_id==eqtestid){
+                            $html += "<option value='" + item.eqtest_id + "' selected='selected'>" + item.eqtest_title + "</option>";
+                        }else {
+                            $html += "<option value='" + item.eqtest_id + "'>" + item.eqtest_title + "</option>";
+                        }
+                    });
+                    $('#eqitem_test_id').append($html);
+                    form.render("select");
+                }
+            });
+        form.on('select(eqitem_test_id)', function (data) {
+            var Ids = data.value;//获取一级下拉框的数据
+            $('#eqitem_content_id').html('')//清空下拉框防止option标签重叠
+            $.get("/words/s/eqcontent/query/" + Ids, {},
+                function (data) {
+                    var ssss=data.data;
+                    var $html = "";
+                    if (data != null) {
+                        $.each(ssss,
+                            function (index, item) {
+                                if(item.eqcontent_id==eqcontentid){
+                                    $html += "<option value='" + item.eqcontent_id + "' selected='selected'>" + item.eqcontent_content + "</option>";
+                                }else {
+                                    $html += "<option value='" + item.eqcontent_id + "'>" + item.eqcontent_content + "</option>";
+                                }
+                            });
+                        $('#eqitem_content_id').append($html);
+                        form.render('select');
+                    }
+                });
+        });
+
+    })
+</script>

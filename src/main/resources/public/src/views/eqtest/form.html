@@ -1,0 +1,88 @@
+<div class="layui-form" lay-filter="eqtest-form" id="eqtest-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试标题</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqtest_title" value="{{ d.params.eqtest_title || '' }}" lay-verify="required"
+                       placeholder="请输入标题" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试介绍</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqtest_content" value="{{ d.params.eqtest_content || '' }}" lay-verify="required"
+                       placeholder="请输入内容" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试VIP</label>
+        <div class="layui-input-inline">
+            <select name="eqtest_vip" id="eqtest_vip">
+                <option value="0">免费会员</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试图片</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqtest_pic" value="{{ d.params.eqtest_pic || '' }}" lay-verify="required"
+                       placeholder="请上传图片" autocomplete="off" class="layui-input" id="eqtest_pic" disabled="true ">
+            </script>
+        </div>
+        <button style="float: left;" type="button" class="layui-btn" id="eqtest-upload-eqtest">上传图片</button>
+    </div>
+    <script type="text/html" template>
+        <input type="hidden" name="eqtest_id" value="{{ d.params.eqtest_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="eqtest-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var vipid;
+    layui.use(['admin', 'form', 'upload', 'jquery'], function () {
+        var $ = layui.$, form = layui.form, upload = layui.upload, jquery = layui.jquery;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem: '#eqtest-upload-eqtest',
+            url: '/words/s/eqtest/upload',
+            done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("eqtest_pic").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/vip/query", {},
+            function (data) {
+                var ssss=data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss,function (index, item) {
+                        if(item.vip_id==vipid){
+                            $html += "<option value='" + item.vip_id + "' selected='selected'>" + item.vip_name + "</option>";
+                        }else {
+                            $html += "<option value='" + item.vip_id + "'>" + item.vip_name + "</option>";
+                        }
+                    });
+                    $('#eqtest_vip').append($html);
+                    form.render("select");
+                }
+            });
+    })
+</script>

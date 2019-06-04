@@ -1,0 +1,78 @@
+<div class="layui-form" lay-filter="eqcontent-form" id="eqcontent-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">测试题目顺序(第几题)</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqcontent_tag" value="{{ d.params.eqcontent_tag || '' }}" lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属情商测试试卷</label>
+        <div class="layui-input-inline">
+            <select name="eqcontent_eqtest_id" id="eqcontent_eqtest_id">
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">测试内容</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <textarea name="eqcontent_content" style="width: 400px;" rows="10" cols="30"  lay-verify="required"
+                          placeholder="请输入内容" autocomplete="off" class="layui-textarea">
+                        {{ d.params.eqcontent_content || '' }}
+                </textarea>
+            </script>
+        </div>
+    </div>
+
+    <script type="text/html" template>
+        <input type="hidden" name="eqcontent_id" value="{{ d.params.eqcontent_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="eqcontent-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var eqtestid;
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#eqcontent-upload-eqcontent',
+            url : '/words/s/eqcontent/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/eqtest/query", {},
+            function (data) {
+                var ssss=data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss,function (index, item) {
+                        if(item.eqtest_id==eqtestid){
+                            $html += "<option value='" + item.eqtest_id + "' selected='selected'>" + item.eqtest_title + "</option>";
+                        }else {
+                            $html += "<option value='" + item.eqtest_id + "'>" + item.eqtest_title + "</option>";
+                        }
+                    });
+                    $('#eqcontent_eqtest_id').append($html);
+                    form.render("select");
+                }
+            });
+    })
+</script>

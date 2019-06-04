@@ -1,0 +1,95 @@
+<div class="layui-form" lay-filter="eqresult-form" id="eqresult-form" style="padding: 20px 30px 0 0;">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试试卷</label>
+        <div class="layui-input-inline">
+            <select name="eqresult_test_id" id="eqresult_test_id">
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商测试答案标题</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="eqresult_title" value="{{ d.params.eqresult_title || '' }}" lay-verify="required"
+                       placeholder="请输入标题" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">情商答案内容</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <textarea name="eqresult_content" style="width: 400px;" rows="10" cols="30"  lay-verify="required"
+                          placeholder="请输入内容" autocomplete="off" class="layui-textarea">
+                        {{ d.params.eqresult_content || '' }}
+                </textarea>
+                <!--<texta type="text" name="eqresult_content" value="{{ d.params.eqresult_content || '' }}" lay-verify="required"-->
+                       <!--placeholder="请输入内容" autocomplete="off" class="layui-input">-->
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分数范围</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <script type="text/html" template>
+                <input type="text" name="eqresult_point_start" value="{{ d.params.eqresult_point_start || '' }}"
+                       placeholder="￥" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="eqresult_point_end" value="{{ d.params.eqresult_point_end || '' }}"
+                           placeholder="￥" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </script>
+    </div>
+    <script type="text/html" template>
+        <input type="hidden" name="eqresult_id" value="{{ d.params.eqresult_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="eqresult-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var eqtestid;
+    layui.use(['admin', 'form', 'upload'], function () {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem: '#eqresult-upload-eqresult',
+            url: '/words/s/eqresult/upload',
+            done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/eqtest/query", {},
+            function (data) {
+                var ssss = data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss, function (index, item) {
+                        if (item.eqtest_id == eqtestid) {
+                            $html += "<option value='" + item.eqtest_id + "' selected='selected'>" + item.eqtest_title + "</option>";
+                        } else {
+                            $html += "<option value='" + item.eqtest_id + "'>" + item.eqtest_title + "</option>";
+                        }
+                    });
+                    $('#eqresult_test_id').append($html);
+                    form.render("select");
+                }
+            });
+    })
+</script>

@@ -1,0 +1,68 @@
+<div class="layui-form" lay-filter="toptag-form" id="toptag-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">专题标题</label>
+        <div class="layui-input-inline">
+            <select name="toptag_toptitle_id" id="toptag_toptitle_id">
+
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">专题标签</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="toptag_name" value="{{ d.params.toptag_name || '' }}" lay-verify="required" placeholder="请输入地址" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+
+    <script type="text/html" template>
+        <input type="hidden" name="toptag_id" value="{{ d.params.toptag_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="toptag-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    var toptitleid;
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#toptag-upload-toptag',
+            url : '/words/s/toptag/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+        $.get("/words/s/toptitle/query", {},
+            function (data) {
+                var ssss=data.data;
+                var $html = "";
+                if (ssss != null) {
+                    $.each(ssss,function (index, item) {
+                        if(item.toptitle_id==toptitleid){
+                            $html += "<option value='" + item.toptitle_id + "' selected='selected'>" + item.toptitle_title + "</option>";
+                        }else {
+                            $html += "<option value='" + item.toptitle_id + "'>" + item.toptitle_title + "</option>";
+                        }
+                    });
+                    $('#toptag_toptitle_id').append($html);
+                    form.render("select");
+                }
+            });
+    })
+</script>

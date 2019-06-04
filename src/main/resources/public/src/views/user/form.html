@@ -1,0 +1,94 @@
+<div class="layui-form" lay-filter="user-form" id="user-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名称</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="user_nickname" value="{{ d.params.user_nickname || '' }}" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户手机号</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="user_phone" value="{{ d.params.user_phone || '' }}" lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员等级</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <select name="user_vip" id="level" lay-filter="level">
+                    {{# if(d.params.user_vip==0){  }}
+                      <option  value="0" selected>非会员</option>
+                    {{#    }else{   }}
+                      <option  value="0" >非会员</option>
+                    {{#  } }}
+                    {{# if(d.params.user_vip==1){  }}
+                    <option  value="1" selected>初级</option>
+                    {{#    }else{   }}
+                    <option  value="1" >初级</option>
+                    {{#  } }}
+
+                    {{# if(d.params.user_vip==2){  }}
+                    <option  value="2" selected>中级</option>
+                    {{#    }else{   }}
+                    <option  value="2" >中级</option>
+                    {{#  } }}
+                    {{# if(d.params.user_vip==3){  }}
+                    <option  value="3" selected>高级</option>
+                    {{#    }else{   }}
+                    <option  value="3" >高级</option>
+                    {{#  } }}
+                </select>
+            </script>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户头像</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="user_headpic" value="{{ d.params.user_headpic || '' }}" lay-verify="required"
+                       placeholder="请上传图片" autocomplete="off" class="layui-input" id="img_url" disabled="true ">
+            </script>
+        </div>
+        <button style="float: left;" type="button" class="layui-btn" id="user-upload-user">上传图片</button>
+    </div>
+    <script type="text/html" template>
+        <input type="hidden" name="user_id" value="{{ d.params.user_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="user-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+        $(function () {
+            
+        })
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#user-upload-user',
+            url : '/words/s/user/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+    })
+</script>

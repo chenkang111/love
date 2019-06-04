@@ -1,0 +1,77 @@
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">快捷方式</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel layadmin-carousel layadmin-shortcut">
+                                <div carousel-item>
+                                    <ul class="layui-row layui-col-space10">
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="report/list">
+                                                <i class="layui-icon layui-icon-chat"></i>
+                                                <cite>举报内容</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="feedback/list">
+                                                <i class="layui-icon layui-icon-survey"></i>
+                                                <cite>意见反馈</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="user/list">
+                                                <i class="layui-icon layui-icon-user"></i>
+                                                <cite>用户信息</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="correlation/list">
+                                                <i class="layui-icon layui-icon-set"></i>
+                                                <cite>设置</cite>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4">
+
+            <div class="layui-card">
+                <div class="layui-card-header">效果报告</div>
+                <div class="layui-card-body layadmin-takerates">
+
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">实时监控</div>
+                <div class="layui-card-body layadmin-takerates">
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script>
+    layui.use('console', layui.factory('console')).use(['admin', 'console', 'table'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , view = layui.view
+            , table = layui.table
+            , form = layui.form;
+    });
+</script>
+

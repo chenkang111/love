@@ -1,0 +1,52 @@
+<div class="layui-form" lay-filter="special-form" id="special-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">专题名称</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="special_name" value="{{ d.params.special_name || '' }}" lay-verify="required"
+                       placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">专题图片</label>
+        <div class="layui-input-inline">
+            <script type="text/html" template>
+                <input type="text" name="special_pic" value="{{ d.params.special_pic || '' }}" lay-verify="required"
+                       placeholder="请上传图片" autocomplete="off" class="layui-input" id="img_url" disabled="true ">
+            </script>
+        </div>
+        <button style="float: left;" type="button" class="layui-btn" id="special-upload-special">上传图片</button>
+    </div>
+    <script type="text/html" template>
+        <input type="hidden" name="special_id" value="{{ d.params.special_id || '' }}">
+    </script>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="special-form-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+<script>
+    layui.use([ 'admin', 'form', 'upload' ], function() {
+        var $ = layui.$, form = layui.form, upload = layui.upload;
+
+        form.render();//使select可以显示option
+        //-------------文件上传开始----------
+        upload.render({
+            elem : '#special-upload-special',
+            url : '/words/s/special/upload',
+            done : function(res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                console.log(res.data.src);
+                document.getElementById("img_url").value = res.data.src;//
+            }
+        });
+        //-------------文件上传结束----------
+    })
+</script>
