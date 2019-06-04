@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcf.words.mapper.HighlightMapper">
+
+    <!-- 查询专题开场白 -->
+    <select id="findHighlight" resultType="com.zcf.words.entity.Highlight" parameterType="java.lang.String">
+        select l.highlight_id,l.highlight_content from highlight l where 1=1 and l.highlight_toptag_id = ${toptagid}
+    </select>
+
+</mapper>

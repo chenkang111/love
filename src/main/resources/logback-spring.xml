@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" debug="false" scanPeriod="30">
+
+    <!--引入默认的一些设置-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!--写入日志到控制台的appender,用默认的-->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!--web信息-->
+    <logger name="org.springframework.web" level="DEBUG"/>
+
+    <!--根据不同环境定义日志文件的存储地址(勿在 LogBack 的配置中使用相对路径)-->
+    <!--<springProfile name="dev">-->
+    <!--<property name="LOG_PATH" value="/Users/seaguil/log/zeus"/>-->
+    <!--</springProfile>-->
+    <!--  <springProfile name="uat">
+          <property name="LOG_PATH" value="/home/logs/daps-api"/>
+      </springProfile>
+      <springProfile name="prod">
+          <property name="LOG_PATH" value="/home/logs/daps-api"/>
+      </springProfile>-->
+
+    <!--写入日志到文件的appender-->
+    <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,每天按日期格式命名（%i:超过日志文件大小，文件名后面数组自动累加(如：logs-20170421-0.log))-->
+            <fileNamePattern>${LOG_PATH}/logs-%d{yyyyMMdd}-%i.log</fileNamePattern>
+            <!--日志文件保留天数-->
+            <maxHistory>60</maxHistory>
+            <!--日志文件最大的容量，超过大小自动分割-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>40MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!--日志编码器-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--异步到文件-->
+    <appender name="asyncFileAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <!--默认情况下，当阻塞队列剩余20％的容量时，它将删除级别TRACE，DEBUG和INFO的事件，只保留WARN和ERROR级别的事件。要保留所有事件，请将discardingThreshold设置为0。-->
+        <discardingThreshold>0</discardingThreshold>
+        <!--阻塞队列的最大容量。默认情况下，queueSize设置为256。-->
+        <queueSize>500</queueSize>
+        <appender-ref ref="FILE_APPENDER"/>
+    </appender>
+
+    <!--开发环境:打印控制台-->
+    <springProfile name="dev">
+        <!-- 打印sql -->
+        <logger name="com.zcf.words.mapper" level="DEBUG"/>
+        <!-- 打印info级别以上的日志(日志等级顺序：trace、debug、info、warn、error) -->
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!--&lt;!&ndash;测试环境:打印控制台、输出到文件&ndash;&gt;-->
+    <!--<springProfile name="uat">-->
+        <!--&lt;!&ndash; 打印sql &ndash;&gt;-->
+        <!--<logger name="com.zcf.words.mapper" level="DEBUG"/>-->
+        <!--<root level="DEBUG">-->
+            <!--&lt;!&ndash;<appender-ref ref="CONSOLE"/>&ndash;&gt;-->
+            <!--<appender-ref ref="asyncFileAppender"/>-->
+        <!--</root>-->
+    <!--</springProfile>-->
+
+    <!--&lt;!&ndash;生产环境:输出到文件&ndash;&gt;-->
+    <!--<springProfile name="prod">-->
+        <!--&lt;!&ndash; 打印sql &ndash;&gt;-->
+        <!--<logger name="com.zcf.words.mapper" level="DEBUG"/>-->
+        <!--<root level="DEBUG">-->
+            <!--<appender-ref ref="asyncFileAppender"/>-->
+        <!--</root>-->
+    <!--</springProfile>-->
+</configuration>
