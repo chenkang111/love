@@ -1,0 +1,199 @@
+{
+    "code"
+:
+    0,
+        "msg"
+:
+    "",
+        "data"
+:
+    [
+        {
+            "title": "用户会员",
+            "icon": "layui-icon-user",
+            "list": [
+                {
+                    "title": "查看用户",
+                    "jump": "user/list"
+                }
+            ]
+        },
+        {
+            "title": "用户账单",
+            "icon": "layui-icon-form",
+            "list": [
+                {
+                    "title": "查看账单",
+                    "jump": "bill/list"
+                }
+            ]
+        },
+        {
+            "title": "恋爱指南",
+            "icon": "layui-icon-find-fill",
+            "list": [
+                {
+                    "title": "查看恋爱指南",
+                    "jump": "handbook/list"
+                }
+            ]
+        },
+        {
+            "title": "情商测试",
+            "icon": "layui-icon-survey",
+            "list": [
+                {
+                    "title": "查看情商测试试卷",
+                    "jump": "eqtest/list"
+                },
+                {
+                    "title": "查看情商测试题目",
+                    "jump": "eqcontent/list"
+                },
+                {
+                    "title": "查看情商测试选项",
+                    "jump": "eqitem/list"
+                },
+                {
+                    "title": "查看情商测试答案",
+                    "jump": "eqresult/list"
+                }
+            ]
+        },
+        {
+            "title": "展示面",
+            "icon": "layui-icon-picture-fine",
+            "list": [
+                {
+                    "title": "查看展示面",
+                    "jump": "panels/list"
+                },
+                {
+                    "title": "查看展示面图集",
+                    "jump": "atlas/list"
+                }
+            ]
+        },
+        {
+            "title": "讨论内容",
+            "icon": "layui-icon-chat",
+            "list": [
+                {
+                    "title": "讨论提问",
+                    "jump": "discussion/list"
+                },
+                {
+                    "title": "回答回复",
+                    "jump": "comment/list"
+                },
+                {
+                    "title": "举报内容",
+                    "jump": "report/list"
+                }
+            ]
+        },
+        {
+            "title": "精彩文章",
+            "icon": "layui-icon-read",
+            "list": [
+                {
+                    "title": "查看文章",
+                    "jump": "article/list"
+                }
+            ]
+        },
+        {
+            "title": "精彩专题",
+            "icon": "layui-icon-app",
+            "list": [
+                {
+                    "title": "查看专题",
+                    "jump": "special/list"
+                },
+                {
+                    "title": "查看标题",
+                    "jump": "toptitle/list"
+                },
+                {
+                    "title": "查看标签",
+                    "jump": "toptag/list"
+                },
+                {
+                    "title": "查看专题列表",
+                    "jump": "highlight/list"
+                },
+                {
+                    "title": "查看专题内容",
+                    "jump": "highcontent/list"
+                }
+            ]
+        },
+        {
+            "title": "滚动海报",
+            "icon": "layui-icon-carousel",
+            "list": [
+                {
+                    "title": "查看海报",
+                    "jump": "banner/list"
+                }
+            ]
+        },
+        {
+            "title": "聊天记录",
+            "icon": "layui-icon-cellphone",
+            "list": [
+                {
+                    "title": "查看聊天记录",
+                    "jump": "chat/list"
+                }
+            ]
+        },
+        {
+            "title": "VIP管理",
+            "icon": "layui-icon-face-smile",
+            "list": [
+                {
+                    "title": "查看VIP",
+                    "jump": "vip/list"
+                }
+            ]
+        },
+        {
+            "title": "设置管理",
+            "icon": "layui-icon-set",
+            "list": [
+                {
+                    "title": "意见反馈",
+                    "jump": "feedback/list"
+                },
+                {
+                    "title": "隐私政策",
+                    "jump": "policy/list"
+                },
+                {
+                    "title": "使用帮助",
+                    "jump": "help/list"
+                },
+                {
+                    "title": "关于信息",
+                    "jump": "correlation/list"
+                }
+
+            ]
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
